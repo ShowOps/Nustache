@@ -10,11 +10,11 @@ namespace Nustache.Mvc5.Config
     public class WaxSection : ConfigurationSection
     {
         [ConfigurationProperty("disabled", DefaultValue = "false", IsRequired = false)]
-        public Boolean Disabled
+        public bool Disabled
         {
             get
             {
-                return (Boolean)this["disabled"];
+                return (bool)this["disabled"];
             }
             set
             {
