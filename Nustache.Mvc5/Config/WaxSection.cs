@@ -39,5 +39,18 @@ namespace Nustache.Mvc5.Config
                 this["outputPath"] = value;
             }
         }
+
+        [ConfigurationProperty("expiresInMinutes", DefaultValue = "10080", IsRequired = false)] // 1 week
+        public int ExpiresInMinutes
+        {
+            get
+            {
+                return (int)this["expiresInMinutes"];
+            }
+            set
+            {
+                this["expiresInMinutes"] = value;
+            }
+        }
     }
 }

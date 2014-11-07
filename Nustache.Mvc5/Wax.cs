@@ -55,7 +55,23 @@ namespace Nustache.Mvc5
                 System.IO.Directory.CreateDirectory(context.Server.MapPath(waxPath));
             }
 
-            System.IO.File.WriteAllText(context.Server.MapPath(string.Format("{0}{1}.json", waxPath, templateName)), waxJson, System.Text.Encoding.UTF8);
+            var filePath = context.Server.MapPath(string.Format("{0}{1}.json", waxPath, templateName));
+
+            if (ShouldWriteJson(context, filePath))
+            {
+                System.IO.File.WriteAllText(filePath, waxJson, System.Text.Encoding.UTF8);
+            }
+        }
+
+        protected bool ShouldWriteJson(HttpContextBase context, string filePath)
+        {
+            // Check if a force flag has been set
+            var forceFlag = context.Request.QueryString.AllKeys.Any(x => x != null && x.ToLower() == "force");
+
+            var lastModified = System.IO.File.GetLastWriteTime(filePath);
+            var timespan = DateTime.Now - lastModified;
+
+            return timespan.TotalMinutes > _WaxSection.ExpiresInMinutes || forceFlag;
         }
     }
 }
