@@ -5,11 +5,11 @@ using System.Web.Mvc;
 
 namespace Nustache.Mvc5
 {
-    public delegate void AdditionalProcessingHandler(object sender, AdditionalProcessingArgs e);
+    public delegate void CreatingViewHandler(object sender, CreatingViewArgs e);
 
     public class NustacheViewEngine : VirtualPathProviderViewEngine
     {
-        public event AdditionalProcessingHandler AdditionalProcessing;
+        public event CreatingViewHandler CreatingView;
 
         public NustacheViewEngine(string[] fileExtensions = null)
         {
@@ -83,7 +83,7 @@ namespace Nustache.Mvc5
 
         protected override IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
-            OnAdditionalProcessing(controllerContext, viewPath, masterPath);
+            OnCreatingView(controllerContext, viewPath, masterPath);
             return GetView(controllerContext, viewPath, masterPath);
         }
 
@@ -97,27 +97,20 @@ namespace Nustache.Mvc5
             return new NustacheView(this, controllerContext, viewPath, masterPath);
         }
 
-        protected virtual void OnAdditionalProcessing(ControllerContext controllerContext, string viewPath, string masterPath)
+        protected virtual void OnCreatingView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
-            if (AdditionalProcessing != null)
+            if (CreatingView != null)
             {
-                var args = new AdditionalProcessingArgs()
+                var args = new CreatingViewArgs()
                 {
                     ControllerContext = controllerContext,
                     MasterPath = masterPath,
                     ViewPath = viewPath
                 };
 
-                AdditionalProcessing(this, args);
+                CreatingView(this, args);
             }
         }
-    }
-
-    public class AdditionalProcessingArgs
-    {
-        public ControllerContext ControllerContext { get; set; }
-        public string ViewPath { get; set; }
-        public string MasterPath { get; set; }
     }
 
     public enum NustacheViewEngineRootContext

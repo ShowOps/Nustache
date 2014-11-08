@@ -19,7 +19,7 @@ namespace Nustache.Mvc5
             _WaxSection = (WaxSection)ConfigurationManager.GetSection("wax");
         }
 
-        public void AdditionalProcessing(object sender, AdditionalProcessingArgs args)
+        public void AdditionalProcessing(object sender, CreatingViewArgs args)
         {
             // Only proceed if we are in debug mode.  There is no sense writing this json if we are in release mode.
             if (HttpContext.Current.IsDebuggingEnabled && !_WaxSection.Disabled)
