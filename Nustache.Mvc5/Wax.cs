@@ -66,7 +66,7 @@ namespace Nustache.Mvc5
         protected bool ShouldWriteJson(HttpContextBase context, string filePath)
         {
             // Check if a force flag has been set
-            var forceFlag = context.Request.QueryString.AllKeys.Any(x => x != null && x.ToLower() == "force");
+            var forceFlag = context.Request.QueryString.AllKeys.Any(x => x != null && x.ToLower() == "wax");
 
             var lastModified = System.IO.File.GetLastWriteTime(filePath);
             var timespan = DateTime.Now - lastModified;
