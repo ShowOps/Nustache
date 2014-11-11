@@ -10,15 +10,27 @@ namespace Nustache.Mvc5
     public class NustacheViewEngine : VirtualPathProviderViewEngine
     {
         public event CreatingViewHandler CreatingView;
+        protected string[] AdditionalLocations { get; set; }
 
-        public NustacheViewEngine(string[] fileExtensions = null)
+        public NustacheViewEngine(string[] fileExtensions = null, string[] additionalLocations = null)
         {
             // If we're using MVC, we probably want to use the same encoder MVC uses.
             Encoders.HtmlEncode = HttpUtility.HtmlEncode;
 
             FileExtensions = fileExtensions ?? new[] { "mustache" };
+            AdditionalLocations = additionalLocations ?? new string[] { };
             SetLocationFormats();
             RootContext = NustacheViewEngineRootContext.Model;
+        }
+
+        private List<string> AppendAdditionalLocations(List<string> locationFormats, string fileExtension)
+        {
+            foreach (var location in AdditionalLocations)
+            {
+                locationFormats.Add(string.Format("{0}.{1}", location, fileExtension));
+            }
+
+            return locationFormats;
         }
 
         private void SetLocationFormats()
@@ -36,39 +48,39 @@ namespace Nustache.Mvc5
                 _MasterLocationFormats.AddRange(new[]
                 {
                     "~/Views/{1}/{0}." + fileExtension,
-                    "~/Views/Shared/{0}." + fileExtension,
-                    "~/Views/Partials/{0}." + fileExtension
+                    "~/Views/Shared/{0}." + fileExtension
                 });
+                _MasterLocationFormats = AppendAdditionalLocations(_MasterLocationFormats, fileExtension);
                 _ViewLocationFormats.AddRange(new[]
                 {
                     "~/Views/{1}/{0}." + fileExtension,
-                    "~/Views/Shared/{0}." + fileExtension,
-                    "~/Views/Partials/{0}." + fileExtension
+                    "~/Views/Shared/{0}." + fileExtension
                 });
+                _ViewLocationFormats = AppendAdditionalLocations(_ViewLocationFormats, fileExtension);
                 _PartialViewLocationFormats.AddRange(new[]
                 {
                     "~/Views/{1}/{0}." + fileExtension,
-                    "~/Views/Shared/{0}." + fileExtension,
-                    "~/Views/Partials/{0}." + fileExtension
+                    "~/Views/Shared/{0}." + fileExtension
                 });
+                _PartialViewLocationFormats = AppendAdditionalLocations(_PartialViewLocationFormats, fileExtension);
                 _AreaMasterLocationFormats.AddRange(new[]
                 {
                     "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
-                    "~/Areas/{2}/Views/Shared/{0}." + fileExtension,
-                    "~/Views/Partials/{0}." + fileExtension
+                    "~/Areas/{2}/Views/Shared/{0}." + fileExtension
                 });
+                _AreaMasterLocationFormats = AppendAdditionalLocations(_AreaMasterLocationFormats, fileExtension);
                 _AreaViewLocationFormats.AddRange(new[]
                 {
                     "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
-                    "~/Areas/{2}/Views/Shared/{0}." + fileExtension,
-                    "~/Views/Partials/{0}." + fileExtension
+                    "~/Areas/{2}/Views/Shared/{0}." + fileExtension
                 });
+                _AreaViewLocationFormats = AppendAdditionalLocations(_AreaViewLocationFormats, fileExtension);
                 _AreaPartialViewLocationFormats.AddRange(new[]
                 {
                     "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
-                    "~/Areas/{2}/Views/Shared/{0}." + fileExtension,
-                    "~/Views/Partials/{0}." + fileExtension
+                    "~/Areas/{2}/Views/Shared/{0}." + fileExtension
                 });
+                _AreaPartialViewLocationFormats = AppendAdditionalLocations(_AreaPartialViewLocationFormats, fileExtension);
             }
 
             MasterLocationFormats = _MasterLocationFormats.ToArray();

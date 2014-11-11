@@ -21,7 +21,7 @@ namespace Nustache.Mvc5.Example
             engines.RemoveAt(0);
 
             // Create the engine and set up an event handler if desired.
-            var engine = new NustacheViewEngine { RootContext = NustacheViewEngineRootContext.Model };
+            var engine = new NustacheViewEngine(null, new[] { "~/Views/Partials/{0}" }) { RootContext = NustacheViewEngineRootContext.Model };
             engine.CreatingView += new CreatingViewHandler(_wax.AdditionalProcessing);
 
             engines.Add(engine);
