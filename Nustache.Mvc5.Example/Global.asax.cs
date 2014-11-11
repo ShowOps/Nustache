@@ -22,7 +22,7 @@ namespace Nustache.Mvc5.Example
 
             // Create the engine and set up an event handler if desired.
             var engine = new NustacheViewEngine(null, new[] { "~/Views/Partials/{0}" }) { RootContext = NustacheViewEngineRootContext.Model };
-            engine.CreatingView += new CreatingViewHandler(_wax.AdditionalProcessing);
+            engine.CreatingView += new CreatingViewHandler(_wax.CreatingView);
 
             engines.Add(engine);
         }
