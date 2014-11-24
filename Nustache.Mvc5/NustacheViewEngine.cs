@@ -101,6 +101,7 @@ namespace Nustache.Mvc5
 
         protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath)
         {
+            OnCreatingView(controllerContext, partialPath, "");
             return GetView(controllerContext, partialPath, null);
         }
 
