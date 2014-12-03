@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 
 namespace Nustache.Core
 {
@@ -83,6 +84,7 @@ namespace Nustache.Core
             new PropertyDescriptorValueGetterFactory(),
             new GenericDictionaryValueGetterFactory(),
             new DictionaryValueGetterFactory(),
+            new JObjectValueGetterFactory(),            
             new MethodInfoValueGatterFactory(),
             new PropertyInfoValueGetterFactory(),
             new FieldInfoValueGetterFactory(),
@@ -95,6 +97,19 @@ namespace Nustache.Core
         }
     }
 
+  internal class JObjectValueGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            if (target is JObject)
+            {
+                return new JObjectValueGetter((JObject)target, name);
+            }      
+
+            return null;
+        }
+    }
+    
     internal class XmlNodeValueGetterFactory : ValueGetterFactory
     {
         public override ValueGetter GetValueGetter(object target, Type targetType, string name)

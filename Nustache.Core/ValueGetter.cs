@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 
 namespace Nustache.Core
 {
@@ -44,6 +45,23 @@ namespace Nustache.Core
         }
 
         #endregion
+    }
+
+    internal class JObjectValueGetter : ValueGetter
+    {
+        private readonly JObject _target;
+        private readonly string _name;
+
+        internal JObjectValueGetter(JObject target, string name)
+        {
+            _target = target;
+            _name = name;
+        }
+
+        public override object GetValue()
+        {
+            return _target.GetValue(_name, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 
     internal class XmlNodeValueGetter : ValueGetter

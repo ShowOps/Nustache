@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 
 namespace Nustache.Core
 {
@@ -138,7 +139,13 @@ namespace Nustache.Core
                 }
                 yield break;
             }
-            else if (value is bool)
+
+            if (value is JToken)
+            {
+                value=this.UnwrapJToken((JToken)value);
+            }
+
+            if (value is bool)
             {
                 if ((bool)value)
                 {
@@ -208,6 +215,46 @@ namespace Nustache.Core
             }
 
             return true;
+        }
+
+
+        private object UnwrapJToken(JToken token)
+        {
+            object unwrapped = null;
+            var tokenType = token.Type;
+            
+            switch (tokenType)
+            {
+                case JTokenType.Undefined:
+                case JTokenType.Null:
+                case JTokenType.None:
+                    break;
+                case JTokenType.Object:
+                    unwrapped = token.Value<object>();
+                    break;
+                case JTokenType.Array:
+                    unwrapped = token.Values<object>();
+                    break;
+                case JTokenType.Integer:
+                    unwrapped = token.Value<int>();
+                    break;
+                case JTokenType.Float:
+                    unwrapped = token.Value<float>();
+                    break;
+                case JTokenType.String:
+                    unwrapped = token.Value<string>();
+                    break;
+                case JTokenType.Boolean:
+                    unwrapped = token.Value<bool>();
+                    break;
+                case JTokenType.Guid:
+                    unwrapped = token.Value<Guid>();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return unwrapped;
         }
 
         public void WriteLiteral(string text)
