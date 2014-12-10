@@ -194,6 +194,11 @@ namespace Nustache.Core
 
         public bool IsTruthy(object value)
         {
+            if (value is JToken)
+            {
+                value = this.UnwrapJToken((JToken)value);
+            }
+
             if (value == null)
             {
                 return false;
