@@ -5,14 +5,17 @@ namespace Nustache.Core
     {
         public bool RaiseExceptionOnDataContextMiss { get; set; }
         public bool RaiseExceptionOnEmptyStringValue { get; set; }
+        public bool EscapeEnabled { get; set; }
 
         public static RenderContextBehaviour GetDefaultRenderContextBehaviour()
         {
             return new RenderContextBehaviour
                         {
-                            RaiseExceptionOnDataContextMiss = false, 
-                            RaiseExceptionOnEmptyStringValue  = false
-                        }; 
+                            RaiseExceptionOnDataContextMiss = false,
+                            RaiseExceptionOnEmptyStringValue = false,
+                            EscapeEnabled = true
+                        };
         }
+
     }
 }

@@ -350,6 +350,11 @@ namespace Nustache.Core
             _dataStack.Push(data);
         }
 
+        public bool Escape(bool escape)
+        {
+            return _renderContextBehaviour.EscapeEnabled && escape;
+        }
+
         public void Pop()
         {
             _dataStack.Pop();

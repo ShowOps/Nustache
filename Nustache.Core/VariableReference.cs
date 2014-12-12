@@ -48,7 +48,7 @@ namespace Nustache.Core
             }
             else if (value != null)
             {
-                context.Write(_escaped
+                context.Write(context.Escape(_escaped)
                     ? Encoders.HtmlEncode(value.ToString())
                     : value.ToString());
             }
